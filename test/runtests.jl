@@ -2,5 +2,7 @@ using Normalize
 using Test
 
 @testset "Normalize.jl" begin
-    # Write your tests here.
+
+    include("test_boxcox.jl")
+
 end
