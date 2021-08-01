@@ -11,7 +11,7 @@ function chisq_goodness(x::AbstractVector{T}) where {T <: Real}
     # use `pdf` function to find expected number of observations per bin
     bin_centers = bin_range[1:end-1] .+ bin_range.step.hi / 2
     expected_pdf = pdf.(Normal(0, 1), bin_centers)
-    bin_expected = expected_pdf .* sum(bincounts) / sum(expected_pdf)
+    bin_expected = floor.(Int, expected_pdf .* sum(bincounts) / sum(expected_pdf))
 
     # calcuate pearson stats (X2)
     𝜒² = pearson_chi(bincounts, bin_expected)
