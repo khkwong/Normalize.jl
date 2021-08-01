@@ -6,5 +6,6 @@ using StatsBase: geomean
 
 include("types.jl")
 include("boxcox.jl")
+include("chisq.jl")
 
 end
