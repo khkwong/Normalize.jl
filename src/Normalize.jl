@@ -2,8 +2,8 @@ module Normalize
 
 using Optim: optimize, minimizer
 using Statistics: mean, var
-using StatsBase: geomean
-using Distributions: fit
+using StatsBase: geomean, Histogram
+using Distributions: fit, Normal, pdf
 
 include("types.jl")
 include("boxcox.jl")
