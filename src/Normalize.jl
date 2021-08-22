@@ -6,7 +6,8 @@ using StatsBase: geomean, Histogram
 using Distributions: fit, Normal, pdf
 
 include("types.jl")
-include("boxcox.jl")
 include("chisq.jl")
+include("boxcox.jl")
+include("yeojohnson.jl")
 
 end
