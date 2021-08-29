@@ -1,5 +1,5 @@
 """
-    transform(𝐱)
+    transform(::BoxCox, 𝐱)
 
 Transform an array using Box-Cox method.  The power parameter `λ` is derived
 from maximizing a log-likelihood estimator.
@@ -13,12 +13,12 @@ positive.
 """
 function transform(m::BoxCox, 𝐱; kwargs...)
     λ, details = lambda(m, 𝐱; kwargs...)
-    #@info "estimated lambda = $λ"
-    transform(m, 𝐱, λ; kwargs...)
+    @debug "BoxCox: estimated lambda = $λ"
+    return transform(m, 𝐱, λ; kwargs...)
 end
 
 """
-    transform(𝐱, λ; α = 0)
+    transform(::BoxCox, 𝐱, λ; α = 0)
 
 Transform an array using Box-Cox method with the provided power parameter `λ`.
 If the array contains any non-positive values then a `DomainError` is thrown.
@@ -36,14 +36,14 @@ function transform(::BoxCox, 𝐱, λ; α = 0, scaled = false, kwargs...)
         "You may specify α argument(shift). "))
     if scaled
         gm = geomean(𝐱)
-        @. λ ≈ 0 ? gm * log(𝐱) : (𝐱 ^ λ - 1) / (λ * gm ^ (λ - 1))
+        return @. λ ≈ 0 ? gm * log(𝐱) : (𝐱 ^ λ - 1) / (λ * gm ^ (λ - 1))
     else
-        @. λ ≈ 0 ? log(𝐱) : (𝐱 ^ λ - 1) / λ
+        return @. λ ≈ 0 ? log(𝐱) : (𝐱 ^ λ - 1) / λ
     end
 end
 
 """
-    lambda(𝐱; interval = (-2.0, 2.0), method = :geomean)
+    lambda(::BoxCox, 𝐱; interval = (-2.0, 2.0), method = :geomean)
 
 Calculate lambda from an array using a log-likelihood estimator.
 
@@ -56,11 +56,11 @@ See also: [`log_likelihood`](@ref)
 function lambda(m::BoxCox, 𝐱; interval = (-2.0, 2.0), kwargs...)
     i1, i2 = interval
     res = optimize(λ -> -log_likelihood(m, 𝐱, λ; kwargs...), i1, i2)
-    (value=minimizer(res), details=res)
+    return (value=minimizer(res), details=res)
 end
 
 """
-    log_likelihood(𝐱, λ; method = :geomean)
+    log_likelihood(::BoxCox, 𝐱, λ; method = :geomean)
 
 Return log-likelihood for the given array and lambda.
 
